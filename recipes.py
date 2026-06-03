@@ -98,3 +98,17 @@ class ShoppingList:
         new_list._items = self._items + other._items
         return new_list
 
+class DietaryRecipe(Recipe):
+    def __init__(self, title: str, diet_type: str, ingredients=None):
+        super().__init__(title, ingredients)
+        self.diet_type = diet_type
+
+    def scale(self, ratio: float):
+        if not self.is_valid_ratio(ratio):
+            raise ValueError("Коэффициент должен быть положительным числом")
+        scaled_recipe = super().scale(ratio)
+        return DietaryRecipe(scaled_recipe.title, self.diet_type, scaled_recipe.ingredients)
+
+    def __str__(self):
+        return f"[{self.diet_type}] {super().__str__()}"
+
