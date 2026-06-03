@@ -84,3 +84,37 @@ def test_shopping_list_add_negative_portions():
     with pytest.raises(ValueError):
         sl.add_recipe(recipe, -1)
 
+
+def test_shopping_list_remove_recipe():
+    sl = ShoppingList()
+    recipe = Recipe("Кекс", [Ingredient("Сахар", 200, "г")])
+    sl.add_recipe(recipe, 1)
+    sl.remove_recipe("Кекс")
+    assert len(sl._items) == 0
+
+
+def test_shopping_list_get_list():
+    sl = ShoppingList()
+    r1 = Recipe("Пирог", [Ingredient("Мука", 200, "г"), Ingredient("Крахмал", 100, "г")])
+    r2 = Recipe("Кекс", [Ingredient("Мука", 100, "г")])
+
+    sl.add_recipe(r1, 1)
+    sl.add_recipe(r2, 2)
+
+    buy_list = sl.get_list()
+    assert len(buy_list) == 2
+    assert buy_list[0].name == "Крахмал"
+    assert buy_list[1].quantity == 400.0
+    assert buy_list[1].name == "Мука"
+
+
+def test_shopping_list_add():
+    sl1 = ShoppingList()
+    sl1.add_recipe(Recipe("Пирог", [Ingredient("Мука", 200, "г")]), 1)
+
+    sl2 = ShoppingList()
+    sl2.add_recipe(Recipe("Кекс", [Ingredient("Сахар", 100, "г")]), 1)
+
+    sl3 = sl1 + sl2
+    assert len(sl3._items) == 2
+    assert sl1 is not sl3 and sl2 is not sl3
